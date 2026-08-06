@@ -1,35 +1,22 @@
-const readline = require("readline");
-const rl = readline.createInterface({ input: process.stdin });
+process.stdin.on("data", (chunk) => {
+    const inputData = chunk.toString().trim().split("\n");
+    const proxyObj = new Proxy({}, {
+        get(obj, prop) {
+            return obj[prop];
+        },
 
-    class Animal {
-        kind() {
-            return "animal"
+        set(obj, prop, value) {
+            console.log(`set ${prop}=${value}`);
+
+            obj[prop] = value;
+            return true;
         }
-    }
+    });
 
-    class Dog extends Animal {
-        kind() {
-            return "dog"
-        }
-    }
-
-    class Puppy extends Dog {}
-
-    const puppy = new Puppy();
-    console.log(puppy.kind());
-    console.log(puppy.__proto__.constructor.name);
-    console.log(puppy.__proto__.__proto__.constructor.name)
-    console.log(puppy.__proto__.__proto__.__proto__.constructor.name)
-
-rl.on("line", (line) => {
-    const n = parseInt(line);
+    const items = inputData.map(item => item.trim().split("="));
     
+    for ( let item of items ) {
+        proxyObj[item[0]] = item[1];
+    }
 
-    // console.log(puppy.prototype.__proto__.kind());
-    // console.log(puppy.prototype.__proto__.prototype.__proto__.kind());
-    // console.log(puppy.prototype.__proto__.prototype.__proto__.prototype.__proto__.kind());
-
-
-    rl.close();
-});
-rl.on("close", () => process.exit(0));
+})
