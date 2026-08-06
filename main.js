@@ -1,25 +1,35 @@
 const readline = require("readline");
 const rl = readline.createInterface({ input: process.stdin });
 
-// function* squares() { ... }
-function* squares() {
-    let start = 1;
-    let num = 3;
-    
-    while (true) {
-        yield start;
-
-        start += num;
-        num += 2;
-
+    class Animal {
+        kind() {
+            return "animal"
+        }
     }
-    
-}
+
+    class Dog extends Animal {
+        kind() {
+            return "dog"
+        }
+    }
+
+    class Puppy extends Dog {}
+
+    const puppy = new Puppy();
+    console.log(puppy.kind());
+    console.log(puppy.__proto__.constructor.name);
+    console.log(puppy.__proto__.__proto__.constructor.name)
+    console.log(puppy.__proto__.__proto__.__proto__.constructor.name)
 
 rl.on("line", (line) => {
     const n = parseInt(line);
-    const gen = squares();
-    for (let i = 0; i < n; i++) console.log(gen.next().value);
+    
+
+    // console.log(puppy.prototype.__proto__.kind());
+    // console.log(puppy.prototype.__proto__.prototype.__proto__.kind());
+    // console.log(puppy.prototype.__proto__.prototype.__proto__.prototype.__proto__.kind());
+
+
     rl.close();
 });
 rl.on("close", () => process.exit(0));
