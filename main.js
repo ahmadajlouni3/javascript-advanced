@@ -19,4 +19,6 @@ process.stdin.on("data", (chunk) => {
         proxyObj[item[0]] = item[1];
     }
 
+    console.log(proxyObj.color);
+
 })
