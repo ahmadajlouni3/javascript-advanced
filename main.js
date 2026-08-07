@@ -1,24 +1,21 @@
-process.stdin.on("data", (chunk) => {
-    const inputData = chunk.toString().trim().split("\n");
-    const proxyObj = new Proxy({}, {
-        get(obj, prop) {
-            return obj[prop];
-        },
+function memoize(fn) {
+    const cache = new WeakMap();
+    return function(obj) {
+        // if cache has obj, return cache.get(obj)
+        if (cache.has(obj)) return cache.get(obj);
+        // else compute, store, return
 
-        set(obj, prop, value) {
-            console.log(`set ${prop}=${value}`);
+        const result = fn(obj);
 
-            obj[prop] = value;
-            return true;
-        }
-    });
+        return result;
+    };
+}
 
-    const items = inputData.map(item => item.trim().split("="));
-    
-    for ( let item of items ) {
-        proxyObj[item[0]] = item[1];
-    }
+function expensive(obj) {
+    return obj.x * 2;
+}
 
-    console.log(proxyObj.color);
-
-})
+const memo = memoize(expensive);
+const input = { x: 5 };
+console.log(memo(input));
+console.log(memo(input));
